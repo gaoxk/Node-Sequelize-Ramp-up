@@ -25,7 +25,7 @@ app.get('/', function(req, resp){
 		}else{
 			console.log('gud\n');
 			console.log(rows);
-			resp.send("hellooo, " + rows[0].Name);
+			resp.send("hellooo, " + rows[3].Name);
 		}
 	}); 
 	con.query("INSERT INTO mySampleTable VALUES (7,'lil')", function(error, result){
