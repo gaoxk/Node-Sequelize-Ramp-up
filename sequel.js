@@ -11,11 +11,7 @@ var con = new Sequelize('dbnode', 'root', '',{
 	}
 }); 
 
-var Article = con.define('article', {//making a new table
-	slug:{
-		type: Sequelize.STRING,
-		primaryKey: true
-	},
+var Article = con.define('articleTable', {//making a new table
 	title: {
 		type: Sequelize.STRING,
 		unique: true, // all titles are unique
@@ -58,15 +54,42 @@ con
 		force: true,//clears out old tables of same name
 		logging: console.log
 	})
-	.then(function(){	
-		///inserting info to the table
+	.then(function(){	//connection is done
+		
 		
 		//fails validaion 
-	 	return Article.create({
+	 	/*return Article.create({
 			title: 'my first Article!!!!!!!!!!!!!!!1',
 			body: 'My first article! Well aint this just fun'
+		}); */	
+
+		Article.create({
+			title: 'Some prersistent title',
+			body: 'Uses .create'
+		}).then(function (insertedReord){
+			//promise
+			//happens when .create, an async func is done
+			console.log("using .create: "  );
+			console.log(insertedReord.dataValues);
+
 		});
+
+		var articleInstance = Article.build({
+			title: 'Some non prersistent title',
+			body: 'Uses .build'
+		})
+		articleInstance.save();
  
+		//say you retrieved an article from a user
+		var req = {
+			here: {
+				title: "I'm a request!",
+				body: "Oh yeah!"
+			}
+		};
+
+		Article.create(req.here);
+
 		/* selecting from table
 		Article.findById(1).then(function(article){
 			console.log(article.dataValues);
