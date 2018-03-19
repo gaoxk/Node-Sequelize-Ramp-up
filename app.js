@@ -1,9 +1,10 @@
 var Sequelize = require('sequelize');
-//for the front end
 var express = require('express');
-var app = express();
 var path = require('path');
+var bodyParser = require('body-parser');
+var app = express();
 
+//jquery shenanigans - probably going to delete
 var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
@@ -83,19 +84,12 @@ con
 }); 
 
 
-
-
-
-app.post('/csc', function(req, resp){
-	console.log("hello submit");
-}); 
-
-
-
 // Define the port to run on
 app.set('port', 3000);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 // Listen for requests
 var server = app.listen(app.get('port'), function() {
@@ -104,10 +98,10 @@ var server = app.listen(app.get('port'), function() {
 });
 
 
-$(document).ready(function (){
-	console.log("hello!");
+app.post('/click', function(req, resp){
+	var c = req.query.id;
+	console.log(typeof(c));
+	//console.log(c.trim());
+	resp.send('You sent the id "' + req.body.id + '".');
 });
 
-$('#submit').click(function () {
-	alert("woohoo!");
-});
