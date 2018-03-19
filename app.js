@@ -5,13 +5,13 @@ var bodyParser = require('body-parser');
 var app = express();
 
 //jquery shenanigans - probably going to delete
-var jsdom = require('jsdom');
+/*var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
-var $ = jQuery = require('jquery')(window);
+var $ = jQuery = require('jquery')(window); */
 
 //make things caps to indicate constructive func
 var con = new Sequelize('dbnode', 'root', '',{
@@ -55,8 +55,6 @@ var TextChange = con.define('textChangeTable', {//making a new table
 //sync creates tables and data, doesnt update
 //migrations basically update without manually deleting tables
 
-//con.sync();//connect to database 
-
 var display;
 
 con
@@ -87,9 +85,16 @@ con
 // Define the port to run on
 app.set('port', 3000);
 
+app.use(bodyParser.urlencoded({ extended: true })); 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.post('/click', function(req, resp){
+	var c = req.body.ident;
+	console.log(typeof(c));
+	//console.log(c.trim());
+	resp.send('You sent the id "' + req.body.ident + '".');
+});
 
 // Listen for requests
 var server = app.listen(app.get('port'), function() {
@@ -98,10 +103,4 @@ var server = app.listen(app.get('port'), function() {
 });
 
 
-app.post('/click', function(req, resp){
-	var c = req.query.id;
-	console.log(typeof(c));
-	//console.log(c.trim());
-	resp.send('You sent the id "' + req.body.id + '".');
-});
 
